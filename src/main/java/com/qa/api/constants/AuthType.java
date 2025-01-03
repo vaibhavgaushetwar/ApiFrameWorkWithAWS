@@ -6,5 +6,6 @@ public enum AuthType {
 	OAUTH2,
 	BASIC_AUTH,
 	API_KEY,
-	NO_AUTH;
+	NO_AUTH,
+	BEARER_TOKEN_GOREST;
 }

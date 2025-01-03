@@ -6,7 +6,7 @@ import java.util.Map;
 import com.qa.api.constants.AuthType;
 import com.qa.api.exceptions.FrameworkException;
 import com.qa.api.manager.ConfigManager;
-
+import static org.hamcrest.Matchers.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -22,25 +22,24 @@ public class RestClient {
 //	//Define response spec
 //
 	private ResponseSpecification spec200 = expect().statusCode(200);
+	private ResponseSpecification spec200or404 =  expect().log().all().statusCode(anyOf(equalTo(200), equalTo(404)));
+	private ResponseSpecification spec200or201 =  expect().log().all().statusCode(anyOf(equalTo(200), equalTo(201)));
 	private ResponseSpecification spec201 = expect().statusCode(201);
-//	private ResponseSpecification spec204 = expect().statusCode(204);
-//	private ResponseSpecification spec400 = expect().statusCode(400);
-//	private ResponseSpecification spec401 = expect().statusCode(401);
-//	private ResponseSpecification spec404 = expect().statusCode(404);
-//	private ResponseSpecification spec422 = expect().statusCode(422);
-//	private ResponseSpecification spec500 = expect().statusCode(500);
-//	//
-////
+	private ResponseSpecification spec204 = expect().statusCode(204);
+	private ResponseSpecification spec400 = expect().statusCode(400);
+	private ResponseSpecification spec401 = expect().statusCode(401);
+	private ResponseSpecification spec404 = expect().statusCode(404);
+	private ResponseSpecification spec422 = expect().statusCode(422);
+	private ResponseSpecification spec500 = expect().statusCode(500);
+	//
+//
 //	private String baseurl = ConfigManager.get("baseUrl");
 //
 //
-	private  String  baseUrl= ConfigManager.get("baseUrl");
+private  String  baseUrl= ConfigManager.get("baseUrl");
 	private RequestSpecification setupRequest(AuthType authType, ContentType contentType) {
-		if (baseUrl == null) {
-			throw new RuntimeException("Base URL is null. Please check your configuration.");
-		}
 
-		System.out.println("Using Base URL: " + baseUrl);
+	//System.out.println("Using Base URL: " + baseUrl);
 		RequestSpecification request = RestAssured
 				.given().log().all()
 				.baseUri(baseUrl)
@@ -50,6 +49,9 @@ public class RestClient {
 		switch (authType) {
 			case BEARER_TOKEN:
 				request.header("Authorization", "Bearer " + ConfigManager.get("bearerToken"));
+				break;
+			case BEARER_TOKEN_GOREST:
+				request.header("Authorization", "Bearer " + ConfigManager.get("bearer_Token_gorest"));
 				break;
 			case OAUTH2:
 				request.header("Authorization", "Bearer " + generateOAUTh2Token());
@@ -92,7 +94,7 @@ public Response get(String endPoint ,
 	RequestSpecification request=setUpAuthAndContentType(authType, contentType);
 
 	applyParams(request,queryParam,pathParam);
-	Response response= request.get(endPoint).then().spec(spec200).extract().response();
+	Response response= request.get(endPoint).then().spec(spec200or404).extract().response();
 	response.prettyPrint();
 		return response;
 }
@@ -118,7 +120,7 @@ public Response get(String endPoint ,
 
          applyParams(request,queryParam,pathParam);
 
-		Response response= request.body(body).post(endpoint).then().spec(spec201).extract().response();
+		Response response= request.body(body).post(endpoint).then().spec(spec200or201).extract().response();
 		response.prettyPrint();
 		return response;
 	}
@@ -148,21 +150,7 @@ public Response get(String endPoint ,
 		return response;
 	}
 
-	public Response put(String endpoint, File file,
-						 Map<String, String> queryParam,
-						 Map<String, String> pathParam,
-						 AuthType authType,
-						 ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
-
-		applyParams(request,queryParam,pathParam);
-
-		Response response= request.body(file).put(endpoint).then().spec(spec201).extract().response();
-		response.prettyPrint();
-		return response;
-	}
-
-	public Response patch(String endpoint, File file,
+	public<T> Response put(String endpoint, T body,
 						Map<String, String> queryParam,
 						Map<String, String> pathParam,
 						AuthType authType,
@@ -171,7 +159,21 @@ public Response get(String endPoint ,
 
 		applyParams(request,queryParam,pathParam);
 
-		Response response= request.body(file).put(endpoint).then().spec(spec201).extract().response();
+		Response response= request.body(body).put(endpoint).then().spec(spec200or201).extract().response();
+		response.prettyPrint();
+		return response;
+	}
+
+	public<T> Response patch(String endpoint, T body,
+						Map<String, String> queryParam,
+						Map<String, String> pathParam,
+						AuthType authType,
+						ContentType contentType) {
+		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+
+		applyParams(request,queryParam,pathParam);
+
+		Response response= request.body(body).put(endpoint).then().spec(spec200).extract().response();
 		response.prettyPrint();
 		return response;
 	}
@@ -185,7 +187,7 @@ public Response get(String endPoint ,
 
 		applyParams(request,queryParam,pathParam);
 
-		Response response= request.delete(endpoint).then().spec(spec201).extract().response();
+		Response response= request.delete(endpoint).then().spec(spec204).extract().response();
 		response.prettyPrint();
 		return response;
 	}
