@@ -20,14 +20,14 @@ public class GetUserTest extends BaseTest{
 		Map<String ,String>queryParam= new HashMap<String,String>();
 		queryParam.put("name", "Garud Nair");
 		queryParam.put("status", "active");
-		Response response=restClient.get("/public/v2/users",queryParam,null,AuthType.BEARER_TOKEN_GOREST,ContentType.JSON);
+		Response response=restClient.get(GOREST_BASE_URL,"/public/v2/users",queryParam,null,AuthType.BEARER_TOKEN_GOREST,ContentType.JSON);
 	//	ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 	
 	@Test
 	public void getSingleUserTest() {
-		Response response=restClient.get("/public/v2/users/7609083", null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
+		Response response=restClient.get(GOREST_BASE_URL,"/public/v2/users/7618868", null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 }

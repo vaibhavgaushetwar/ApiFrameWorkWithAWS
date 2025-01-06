@@ -1,6 +1,8 @@
 package com.qa.api.client;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Map;
 
 import com.qa.api.constants.AuthType;
@@ -36,8 +38,8 @@ public class RestClient {
 //	private String baseurl = ConfigManager.get("baseUrl");
 //
 //
-private  String  baseUrl= ConfigManager.get("baseUrl");
-	private RequestSpecification setupRequest(AuthType authType, ContentType contentType) {
+//private  String  baseUrl= ConfigManager.get("baseUrl");
+	private RequestSpecification setupRequest(String baseUrl,AuthType authType, ContentType contentType) {
 
 	//System.out.println("Using Base URL: " + baseUrl);
 		RequestSpecification request = RestAssured
@@ -57,7 +59,7 @@ private  String  baseUrl= ConfigManager.get("baseUrl");
 				request.header("Authorization", "Bearer " + generateOAUTh2Token());
 				break;
 			case BASIC_AUTH:
-				request.header("Authorization", "Bearer ");
+				request.header("Authorization", "Basic " +generateBasicToken());
 				break;
 			case API_KEY:
 				request.header("x-api-key", ConfigManager.get("apiKey"));
@@ -74,7 +76,11 @@ private  String  baseUrl= ConfigManager.get("baseUrl");
 
 	}
 private String generateOAUTh2Token(){
-		return RestAssured.given()
+		ConfigManager.set("clientId","ykAzxTipsPeh6CVO4EB0K4tzP3Wyf2nt");
+	    ConfigManager.set("grantType","client_credentials");
+	    ConfigManager.set("clientSecret","8hmVwGqOaQLDdmgX");
+	    ConfigManager.set("tokenUrl","https://test.api.amadeus.com/v1/security/oauth2/token");
+		String resopnse=RestAssured.given()
 				.log().all()
 				.formParam("client_id",ConfigManager.get("clientId"))
 				.formParam("client_secret",ConfigManager.get("clientSecret"))
@@ -84,14 +90,22 @@ private String generateOAUTh2Token(){
 				.log().all()
 				.extract()
 				.path("access_token");
+		System.out.println("access_token is ===========>" +resopnse);
+		return resopnse;
+}
+private String generateBasicToken(){
+		ConfigManager.set("basicUsernmae","admin");
+	ConfigManager.set("basicPassword","admin");
+		String Cred=ConfigManager.get("basicUsernmae") +":" +ConfigManager.get("basicPassword");
+		return Base64.getEncoder().encodeToString(Cred.getBytes(StandardCharsets.UTF_8));
 }
 
-public Response get(String endPoint ,
+public Response get(String baseUrl, String endPoint ,
 				Map<String ,String>queryParam,
 				Map<String,String>pathParam,
 				AuthType authType,
 				ContentType contentType){
-	RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+	RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
 	applyParams(request,queryParam,pathParam);
 	Response response= request.get(endPoint).then().spec(spec200or404).extract().response();
@@ -111,12 +125,12 @@ public Response get(String endPoint ,
 	 */
 
 
-	public <T> Response post(String endpoint, T body,
+	public <T> Response post(String baseUrl,String endpoint, T body,
 							 Map<String, String> queryParam,
 							 Map<String, String> pathParam,
 							 AuthType authType,
 							 ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+		RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
          applyParams(request,queryParam,pathParam);
 
@@ -136,12 +150,12 @@ public Response get(String endPoint ,
 	 * @param contentType
 	 * @return It return post Api Response
 	 */
-	public Response post(String endpoint, File file,
+	public Response post(String baseUrl,String endpoint, File file,
 							 Map<String, String> queryParam,
 							 Map<String, String> pathParam,
 							 AuthType authType,
 							 ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+		RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
 		applyParams(request,queryParam,pathParam);
 
@@ -150,12 +164,12 @@ public Response get(String endPoint ,
 		return response;
 	}
 
-	public<T> Response put(String endpoint, T body,
+	public<T> Response put(String baseUrl,String endpoint, T body,
 						Map<String, String> queryParam,
 						Map<String, String> pathParam,
 						AuthType authType,
 						ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+		RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
 		applyParams(request,queryParam,pathParam);
 
@@ -164,12 +178,12 @@ public Response get(String endPoint ,
 		return response;
 	}
 
-	public<T> Response patch(String endpoint, T body,
+	public<T> Response patch(String baseUrl,String endpoint, T body,
 						Map<String, String> queryParam,
 						Map<String, String> pathParam,
 						AuthType authType,
 						ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+		RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
 		applyParams(request,queryParam,pathParam);
 
@@ -178,12 +192,12 @@ public Response get(String endPoint ,
 		return response;
 	}
 
-	public Response delete(String endpoint,
+	public Response delete(String baseUrl,String endpoint,
 						Map<String, String> queryParam,
 						Map<String, String> pathParam,
 						AuthType authType,
 						ContentType contentType) {
-		RequestSpecification request=setUpAuthAndContentType(authType, contentType);
+		RequestSpecification request=setUpAuthAndContentType(baseUrl,authType, contentType);
 
 		applyParams(request,queryParam,pathParam);
 
@@ -194,8 +208,8 @@ public Response get(String endPoint ,
 
 
 
-	private RequestSpecification setUpAuthAndContentType(AuthType authType, ContentType contentType) {
-		return setupRequest(authType, contentType);
+	private RequestSpecification setUpAuthAndContentType(String baseUrl,AuthType authType, ContentType contentType) {
+		return setupRequest(baseUrl,authType, contentType);
 	}
 
 	private void applyParams(RequestSpecification request, Map<String, String> queryParam,

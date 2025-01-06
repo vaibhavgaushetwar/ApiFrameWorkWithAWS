@@ -1,1 +1,0 @@
-{"uuid":"61db2268-bf27-4fd4-b81d-544ec6a21f6c","name":"ApiFrameWork","children":["7d8e7713-be41-48fa-b0bb-c542ffc451e7"],"befores":[{"name":"setUp","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1735217732526,"stop":1735217732956}],"afters":[],"start":1735217732511,"stop":1735217733203}

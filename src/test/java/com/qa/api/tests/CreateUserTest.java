@@ -21,7 +21,7 @@ public class CreateUserTest extends BaseTest {
 		//User	user= new User("VaibhavGaushetwar1",email(StringUtility.getRandomEmails()),"male","Active");
 		User	user=new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
 	//	ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
-		Response response=restClient.post("/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
+		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
         Assert.assertEquals(response.getStatusCode(), 201);
 
 
@@ -33,12 +33,12 @@ public class CreateUserTest extends BaseTest {
 	public void CreateUserTestWithBuilder() {
 
 		User user=User.builder().name("RajeshTope").email(StringUtility.getRandomEmails()).status("active").gender("male").build();
-		Response response=restClient.post("/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
+		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 		String UserId =response.jsonPath().getString("id");
 		System.out.println("UserId ========> " +UserId);
 		ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
-		Response responseGet=restClient.get("/public/v2/users/"+UserId, null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
+		Response responseGet=restClient.get(GOREST_BASE_URL,"/public/v2/users/"+UserId, null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		System.out.println("Status code ========> " +responseGet.getStatusCode());
 		Assert.assertEquals(responseGet.getStatusCode(), 200);
 
@@ -57,7 +57,7 @@ public class CreateUserTest extends BaseTest {
 	public void CreateUserUsingJsonFileTest() {
 
 		File userJsonFile = new File("./src/test/resource/jsons/user.json");
-		Response response=restClient.post("/public/v2/users",userJsonFile, null,null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",userJsonFile, null,null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 	}
 }
