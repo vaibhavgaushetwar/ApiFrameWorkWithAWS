@@ -19,8 +19,9 @@ public class CreateUserTest extends BaseTest {
 	@Test
 	public void CreateUserTests() {
 		//User	user= new User("VaibhavGaushetwar1",email(StringUtility.getRandomEmails()),"male","Active");
-		User	user=new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
+	//	User	user=new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
 	//	ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
+		User	user=	new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
 		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
         Assert.assertEquals(response.getStatusCode(), 201);
 
