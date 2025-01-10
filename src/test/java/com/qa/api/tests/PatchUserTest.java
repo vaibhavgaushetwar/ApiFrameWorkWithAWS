@@ -14,7 +14,7 @@ public class PatchUserTest extends BaseTest {
     @Test
     public void PatchUserTestWithBuilder() {
 
-        User user = User.builder().name("Rajanvichare").email(StringUtility.getRandomEmails()).status("active").gender("male").build();
+        User	user=	new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
         Response response = restClient.post(GOREST_BASE_URL,"/public/v2/users", user, null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
         Assert.assertEquals(response.getStatusCode(), 201);
         String UserId = response.jsonPath().getString("id");

@@ -3,6 +3,8 @@ package com.qa.api.tests;
 import com.qa.api.manager.ConfigManager;
 import com.qa.api.utils.StringUtility;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.qa.api.base.BaseTest;
@@ -16,24 +18,27 @@ import java.io.File;
 
 public class CreateUserTest extends BaseTest {
 
-	@Test
-	public void CreateUserTests() {
-		//User	user= new User("VaibhavGaushetwar1",email(StringUtility.getRandomEmails()),"male","Active");
-	//	User	user=new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
-	//	ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
-		User	user=	new User("VaibhavGaushetgdwar1",StringUtility.getRandomEmails(),"male","active");
-		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
-        Assert.assertEquals(response.getStatusCode(), 201);
-
-
+	@DataProvider
+	public Object[][] getUserData() {
+		return new Object[][] {
+				{"Naveen", "male", "active"},
+				{"Abhi", "male", "inactive"},
+				{"Kanchan", "female", "active"}
+		};
+	}
+	@Test(dataProvider = "getUserData")
+	public void createUserTest(String name, String gender, String status) {
+		User user = new User( name, StringUtility.getRandomEmails(), gender, status);
+		Response response = restClient.post(GOREST_BASE_URL, "/public/v2/users", user, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Assert.assertEquals(response.getStatusCode(), 201);
 	}
 
 
 
-	@Test
-	public void CreateUserTestWithBuilder() {
+	@Test(dataProvider ="getUserData")
+	public void CreateUserTestWithBuilder(String name,String gender,String status) {
 
-		User user=User.builder().name("RajeshTope").email(StringUtility.getRandomEmails()).status("active").gender("male").build();
+		User user=User.builder().name(name).email(StringUtility.getRandomEmails()).status(status).gender(gender).build();
 		Response response=restClient.post(GOREST_BASE_URL,"/public/v2/users",user, null,null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 		String UserId =response.jsonPath().getString("id");

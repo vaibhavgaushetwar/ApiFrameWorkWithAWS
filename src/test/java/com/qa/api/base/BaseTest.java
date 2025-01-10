@@ -23,12 +23,12 @@ public void setUpReport(){
     RestAssured.filters(new AllureRestAssured());
 }
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
 
          ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
         restClient = new RestClient();
-        WireMockSetup.CreateMockserver();
+       WireMockSetup.CreateMockserver();
         System.out.println("WireMock server started on port 8089");
 
     }
