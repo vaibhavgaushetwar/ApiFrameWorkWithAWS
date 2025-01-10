@@ -29,7 +29,7 @@ public class CreateUserTest extends BaseTest {
 	@Test(dataProvider = "getUserData")
 	public void createUserTest(String name, String gender, String status) {
 		User user = new User( name, StringUtility.getRandomEmails(), gender, status);
-		//ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
+		ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
 		Response response = restClient.post(GOREST_BASE_URL, "/public/v2/users", user, null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 	}
