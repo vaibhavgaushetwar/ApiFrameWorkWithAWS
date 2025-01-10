@@ -21,15 +21,16 @@ public class CreateUserTest extends BaseTest {
 	@DataProvider
 	public Object[][] getUserData() {
 		return new Object[][] {
-				{"Naveen", "male", "active"},
-				{"Abhi", "male", "inactive"},
+				{"Naveenshet", "male", "active"},
+				{"Abhimanav", "male", "inactive"},
 				{"Kanchan", "female", "active"}
 		};
 	}
 	@Test(dataProvider = "getUserData")
 	public void createUserTest(String name, String gender, String status) {
 		User user = new User( name, StringUtility.getRandomEmails(), gender, status);
-		Response response = restClient.post(GOREST_BASE_URL, "/public/v2/users", user, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		//ConfigManager.set("bearer_Token_gorest","93a0527fadf307a198da47751854ca6894638c7812776568d108fe41d4d2e645");
+		Response response = restClient.post(GOREST_BASE_URL, "/public/v2/users", user, null, null, AuthType.BEARER_TOKEN_GOREST, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 	}
 

@@ -21,6 +21,7 @@ public class MockGetApiProductTest extends BaseTest {
         APIMocks.getDummyUserWithProductJsonFile();
         //  RestAssured.defaultParser = Parser.JSON;
         Response response = restClient.get(BASE_URL_LOCALHOST_PORT, "/api/products", null, null, AuthType.NO_AUTH, ContentType.JSON);
+
         response.then().log().all().assertThat().statusCode(200);
     }
 }

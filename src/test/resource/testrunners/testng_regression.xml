@@ -48,4 +48,9 @@
             <class name="com.qa.api.amadeus.tests.AmadeusApiTest" />
         </classes>
     </test>
+    <test name="Mocking api test Api Test">
+        <classes>
+            <class name="com.qa.mocking.tests.CreateMockUserTest" />
+        </classes>
+    </test>
 </suite>
