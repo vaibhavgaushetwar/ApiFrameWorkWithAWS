@@ -149,8 +149,7 @@
 					<reuseForks>true</reuseForks>
 					<suiteXmlFiles>
 <!--						<suiteXmlFile>src/test/resource/testrunners/testng_regression.xml</suiteXmlFile>-->
-<!--						 <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>-->
-						<suiteXmlFile>${</suiteXmlFile>
+						 <suiteXmlFile>${</suiteXmlFile>
 						<suiteXmlFile>suiteXmlFile}</suiteXmlFile>
 					</suiteXmlFiles>
 
