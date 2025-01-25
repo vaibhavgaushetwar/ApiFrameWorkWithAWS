@@ -59,10 +59,10 @@ pipeline
             if (exitCode != 0) {
                 currentBuild.result = 'FAILURE'
             }
-            bat "docker start apitesting${BUILD_NUMBER}"
-            bat "docker cp apitesting${BUILD_NUMBER}:/app/reports/TestExecutionReport.html ${WORKSPACE}/reports"
-            bat "docker cp apitesting${BUILD_NUMBER}:/app/allure-results ${WORKSPACE}/allure-results"
-            bat "docker rm -f apitesting${BUILD_NUMBER}"
+            bat "docker start vaibhavtestapi${BUILD_NUMBER}"
+            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/app/reports/TestExecutionReport.html ${WORKSPACE}/reports"
+            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/app/allure-results ${WORKSPACE}/allure-results"
+            bat "docker rm -f vaibhavtestapi${BUILD_NUMBER}"
         }
     }
 }
