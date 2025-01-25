@@ -50,7 +50,7 @@ pipeline
             def dockerCommand = """
                 docker run --name vaibhavtestapi${BUILD_NUMBER} \
                 -v "${WORKSPACE}/reports:/app/reports" \
-                vaibhavgaushetwar/apifwwithdocker:latest \
+                vaibhavgaushetwar/apifwwithdocker:1.0 \
                 /bin/bash -c "mvn test -Dsurefire.suiteXmlFiles=${suiteXmlFilePath}"
             """
 
