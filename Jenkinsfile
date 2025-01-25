@@ -49,7 +49,7 @@ pipeline
             def suiteXmlFilePath = 'src/test/resource/testrunners/testng_regression.xml'
             def dockerCommand = """
                 docker run --name vaibhavtestapi${BUILD_NUMBER} \
-                -v "${WORKSPACE}/reports:/app/reports" \
+                -v "${WORKSPACE}/reports:/VaibhavGaushetwar/reports" \
                 vaibhavgaushetwar/apifwwithdocker:1.0 \
                 /bin/bash -c "mvn test -Dsurefire.suiteXmlFiles=${suiteXmlFilePath}"
             """
@@ -60,8 +60,8 @@ pipeline
                 currentBuild.result = 'FAILURE'
             }
             bat "docker start vaibhavtestapi${BUILD_NUMBER}"
-            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/app/reports/TestExecutionReport.html ${WORKSPACE}/reports"
-            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/app/allure-results ${WORKSPACE}/allure-results"
+            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/VaibhavGaushetwar/reports/TestExecutionReport.html ${WORKSPACE}/reports"
+            bat "docker cp vaibhavtestapi${BUILD_NUMBER}:/VaibhavGaushetwar/allure-results ${WORKSPACE}/allure-results"
             bat "docker rm -f vaibhavtestapi${BUILD_NUMBER}"
         }
     }
